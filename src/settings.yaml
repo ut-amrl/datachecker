@@ -1,0 +1,10 @@
+- topics:
+  - topic1:
+    - name: "TOPIC_NAME_1"
+    - freq_mean: 100
+    - freq_std_dev: 25
+
+  - topic2:
+    - name: "TOPIC_NAME_2"
+    - freq_mean: 100
+    - freq_std_dev: 25

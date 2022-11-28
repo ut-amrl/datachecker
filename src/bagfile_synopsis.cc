@@ -33,6 +33,9 @@
 #include <math.h>
 #include <string.h>
 #include <vector>
+#include <deque>
+#include <unordered_map>
+#include <yaml-cpp/yaml.h>
 
 #include "sensor_msgs/Image.h"
 #include "sensor_msgs/LaserScan.h"
@@ -41,52 +44,54 @@
 
 using std::string;
 using std::vector;
+using std::deque;
 
-// Name of the topic on Cobot's software stack that laser data is published on.
-static const string kLaserScanTopic("/Cobot/Laser");
-// Name of the topic on Cobot's software stack that Kinect scan data is
-// published on.
-static const string kKinectScanTopic("/Cobot/Kinect/Scan");
-// Name of topic of Kinect depth images.
-static const string kKinectDepthTopic("/Cobot/Kinect/Depth");
-// Name of topic of throttled Kinect depth images.
-static const string kKinectThrottledDepthTopic("/Cobot/Kinect/DepthThrottled");
-// Name of the topic on Cobot's software stack that odometry is published on.
-static const string kOdometryTopic("/Cobot/Odometry");
-// Name of topic on Cobot's autonomous status is published.
-static const string kCobotStatusTopic("/Cobot/Status");
-// Name of topic on which Cobot's localzation is published.
-static const string kCobotLocalizationTopic("/Cobot/Localization");
-// Name of topic on which Cobot's StarGazer node data is published.
-static const string kCobotStarGazerTopic("/Cobot/StarGazer");
+struct TopicWindow {
+  int windowSize = 0;
+  std::deque<double> timestamps;
+  double expectedRate;
+  double expectedRateStdDev;
+  double stdDevThreshold;
+};
 
-void CheckKinectDepthMessage(
-    const rosbag::MessageInstance& message,
-    uint64_t* num_kinect_depth_msgs_ptr) {
-  uint64_t& num_kinect_depth_msgs = *num_kinect_depth_msgs_ptr;
-  sensor_msgs::ImagePtr depth_message =
-      message.instantiate<sensor_msgs::Image>();
-  if (depth_message != NULL) {
-    if (message.getTopic() == kKinectDepthTopic ||
-        message.getTopic() == kKinectThrottledDepthTopic) {
-      ++num_kinect_depth_msgs;
-    }
-  }
+static std::unordered_map<std::string, TopicWindow> topicInfo;
+static int total_obs = 0;
+static int invalid_obs = 0;
+
+void RegisterTopic(std::string topicName, double expectedRate, double expectedRateStdDev, int windowSize=10, double stdDevThreshold=10.0) {
+  TopicWindow info;
+  info.windowSize = windowSize;
+  info.timestamps = std::deque<double>();
+  info.expectedRate = expectedRate;
+  info.expectedRateStdDev = expectedRateStdDev;
+  info.stdDevThreshold = stdDevThreshold;
+
+  topicInfo[topicName] = info;
 }
 
-void CheckLaserScanMessage(
-    const rosbag::MessageInstance& message, uint64_t* num_laser_msgs_ptr,
-    uint64_t* num_kinect_msgs_ptr) {
-  uint64_t& laser_scan_msgs = *num_laser_msgs_ptr;
-  uint64_t& kinect_scan_msgs = *num_kinect_msgs_ptr;
-  // Check to see if this is a laser scan message.
-  sensor_msgs::LaserScanPtr laser_message =
-      message.instantiate<sensor_msgs::LaserScan>();
-  if (laser_message != NULL) {
-    if (message.getTopic() == kKinectScanTopic) {
-      ++kinect_scan_msgs;
-    } else if (message.getTopic() == kLaserScanTopic) {
-      ++laser_scan_msgs;
+void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& message){
+  total_obs+=1;
+
+  int windowSize = topicInfo[topicName].windowSize;
+  std::deque<double>& timestamps = topicInfo[topicName].timestamps;
+
+  double expectedRate = topicInfo[topicName].expectedRate;
+  double expectedRateStdDev = topicInfo[topicName].expectedRateStdDev;
+  double stdDevThreshold = topicInfo[topicName].stdDevThreshold;
+
+  double lowerRateBound = expectedRate - expectedRateStdDev * stdDevThreshold;
+  double upperRateBound = expectedRate + expectedRateStdDev * stdDevThreshold;
+
+  timestamps.push_back(message.getTime().toSec());
+
+  if (timestamps.size() > (uint32_t)windowSize) {
+    timestamps.pop_front();
+
+    double avgRate = (windowSize-1) / (timestamps.back() - timestamps.front());
+
+    if (avgRate < lowerRateBound || avgRate > upperRateBound){
+      invalid_obs += 1;
+      std::cout << "Rate " << avgRate << " " << topicInfo[topicName].expectedRate - 3 * topicInfo[topicName].expectedRateStdDev << " " << topicInfo[topicName].expectedRate + 3 * topicInfo[topicName].expectedRateStdDev << " " << total_obs << " " << invalid_obs << "\n";
     }
   }
 }
@@ -109,15 +114,22 @@ bool GenerateBagfileSynopsis(const string& filename,
     printf("Unable to read %s, reason:\n %s\n", filename.c_str(), exception.what());
     return false;
   }
-  vector<string> topics;
-  topics.push_back(kLaserScanTopic);
-  topics.push_back(kKinectScanTopic);
-  topics.push_back(kKinectDepthTopic);
-  topics.push_back(kKinectThrottledDepthTopic);
-  topics.push_back(kOdometryTopic);
-  topics.push_back(kCobotLocalizationTopic);
-  topics.push_back(kCobotStatusTopic);
-  topics.push_back(kCobotStarGazerTopic);
+  
+  std::vector<std::string> topics;
+  std::vector<double> topic_mean_rate;
+  std::vector<double> topic_std_dev_rate;
+  
+  //left: average: 9.977, std-dev: 0.0151
+  //right: average: 10.002, std-dev: 0.00683
+  topics.push_back("/stereo/left/image_raw/compressed");
+  topics.push_back("/stereo/right/image_raw/compressed");
+
+  topic_mean_rate.push_back(9.997);
+  topic_mean_rate.push_back(10.082);
+
+  topic_std_dev_rate.push_back(0.0151);
+  topic_std_dev_rate.push_back(0.00683);
+
   rosbag::View view(bag, rosbag::TopicQuery(topics));
 
   double bag_time_start = -1.0;
@@ -134,6 +146,11 @@ bool GenerateBagfileSynopsis(const string& filename,
   uint32_t total_steps = 0;
   bool autonomous = false;
   bool using_enml = true;
+
+  for (uint32_t i = 0; i < topics.size(); i++){
+    RegisterTopic(topics[i], topic_mean_rate[i], topic_std_dev_rate[i], 10);
+  }
+
   for (rosbag::View::iterator it = view.begin(); it != view.end(); ++it) {
     const rosbag::MessageInstance& message = *it;
     bag_time = message.getTime().toSec();
@@ -141,15 +158,9 @@ bool GenerateBagfileSynopsis(const string& filename,
       // Initialize bag starting time.
       bag_time_start = bag_time;
     }
-    // CheckIfAutonomous(message, &autonomous_steps, &total_steps, &autonomous);
-    CheckLaserScanMessage(message, &laser_scan_msgs, kinect_scan_msgs_ptr);
-    CheckKinectDepthMessage(message, kinect_image_msgs_ptr);
-    // if (autonomous) {
-    //   CheckOdometryMessage(message, &distance_traversed);
-    //   CheckStargazerSightings(message, stargazer_sightings_ptr);
-    //   // We assume CoBot is using EnML unless found otherwise.
-    //   if (using_enml) CheckEnml(message, &using_enml);
-    // }
+
+    std::string topic = message.getTopic();
+    AddTopicObservation(topic, message);
   }
   bag_duration = bag_time - bag_time_start;
   const bool is_interesting =
@@ -216,8 +227,21 @@ bool GenerateBagfileSynopsis(const string& filename,
 }
 
 int main(int argc, char** argv) {
-  if (argc < 2) return 0;
-  const size_t num_files = argc - 1;
+
+  
+  //TODO: parse with YAML file. Currently experiencing some errors with import
+  std::string bag_file = "/home/amrl-husky/Datasets/UTPeDa/110222/1667413740.bag";
+
+  rosbag::Bag bag;
+  try {
+    bag.open(bag_file,rosbag::bagmode::Read);
+  } catch(rosbag::BagException exception) {
+    return -1;
+  }
+
+  rosbag::View view(bag); 
+
+  int num_files = 1;
   vector<double> distances(num_files, 0.0);
   vector<double> enml_distances(num_files, 0.0);
   vector<double> durations(num_files, 0.0);
@@ -226,41 +250,15 @@ int main(int argc, char** argv) {
   vector<uint64_t> kinect_images(num_files, 0);
   vector<uint64_t> stargazer_sigtings(num_files, 0);
 
-  // OMP_PARALLEL_FOR
-  for (int i = 1; i < argc; ++i) {
-    GenerateBagfileSynopsis(
-        argv[i],
-        &(distances[i - 1]),
-        &(laser_scans[i - 1]),
-        &(kinect_scans[i - 1]),
-        &(kinect_images[i - 1]),
-        &(stargazer_sigtings[i - 1]),
-        &(durations[i - 1]),
-        &(enml_distances[i - 1]));
-  }
+  GenerateBagfileSynopsis(
+        bag_file,
+        &(distances[0]),
+        &(laser_scans[0]),
+        &(kinect_scans[0]),
+        &(kinect_images[0]),
+        &(stargazer_sigtings[0]),
+        &(durations[0]),
+        &(enml_distances[0]));
 
-  double total_distance = 0.0;
-  double total_enml_distance = 0.0;
-  double total_duration = 0.0;
-  uint64_t total_laser_scans = 0;
-  uint64_t total_kinect_scans = 0;
-  uint64_t total_kinect_images = 0;
-  uint64_t total_stargazer_sightings = 0;
-  for (size_t i = 0; i < num_files; ++i) {
-    total_distance += distances[i];
-    total_duration += durations[i];
-    total_enml_distance += enml_distances[i];
-    total_laser_scans += laser_scans[i];
-    total_kinect_scans += kinect_scans[i];
-    total_kinect_images += kinect_images[i];
-    total_stargazer_sightings += stargazer_sigtings[i];
-  }
-  printf("Total distance traversed: %f km\n", total_distance / 1000.0);
-  printf("Total laser scans: %lu\n", total_laser_scans);
-  printf("Total Kinect scans: %lu\n", total_kinect_scans);
-  printf("Total Kinect images: %lu\n", total_kinect_images);
-  printf("Total stargazer sightings: %lu\n", total_stargazer_sightings);
-  printf("Total duration: %20f\n", total_duration);
-  printf("Total EnML distance: %f\n", total_enml_distance / 1000.0);
   return 0;
 }
