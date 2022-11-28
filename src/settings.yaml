@@ -1,10 +1,12 @@
+- logfile: ""
+- synopsisfile: ""
 - topics:
   - topic1:
-    - name: "TOPIC_NAME_1"
-    - freq_mean: 100
-    - freq_std_dev: 25
+    - name: "/stereo/left/image_raw/compressed"
+    - freq_mean: 10.0
+    - freq_std_dev: 0.15
 
   - topic2:
-    - name: "TOPIC_NAME_2"
-    - freq_mean: 100
-    - freq_std_dev: 25
+    - name: "/stereo/right/image_raw/compressed"
+    - freq_mean: 10.0
+    - freq_std_dev: 0.15

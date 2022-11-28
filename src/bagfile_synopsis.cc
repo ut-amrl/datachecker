@@ -46,6 +46,7 @@ using std::string;
 using std::vector;
 using std::deque;
 
+
 struct TopicWindow {
   int windowSize = 0;
   std::deque<double> timestamps;
@@ -69,7 +70,7 @@ void RegisterTopic(std::string topicName, double expectedRate, double expectedRa
   topicInfo[topicName] = info;
 }
 
-void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& message){
+void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& message, FILE* log_fp){
   total_obs+=1;
 
   int windowSize = topicInfo[topicName].windowSize;
@@ -91,27 +92,39 @@ void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& m
 
     if (avgRate < lowerRateBound || avgRate > upperRateBound){
       invalid_obs += 1;
-      std::cout << "Rate " << avgRate << " " << topicInfo[topicName].expectedRate - 3 * topicInfo[topicName].expectedRateStdDev << " " << topicInfo[topicName].expectedRate + 3 * topicInfo[topicName].expectedRateStdDev << " " << total_obs << " " << invalid_obs << "\n";
+      
+      fprintf(log_fp,
+          "Topic Rate Error\n"
+          "  topic = \"%s\";\n"
+          "  rate_measured = %2.4f;\n"
+          "  expected_rate = %2.4f;\n"
+          "  expected_rate_std_dev = %2.4f;\n"
+          "};\n",
+          topicName.c_str(),
+          avgRate,
+          topicInfo[topicName].expectedRate,
+          topicInfo[topicName].expectedRateStdDev
+          );
     }
   }
 }
 
-bool GenerateBagfileSynopsis(const string& filename,
-                             double* total_distance,
-                             uint64_t* laser_scan_msgs_ptr,
-                             uint64_t* kinect_scan_msgs_ptr,
-                             uint64_t* kinect_image_msgs_ptr,
-                             uint64_t* stargazer_sightings_ptr,
-                             double* bag_duration_ptr,
-                             double* enml_distance) {
+bool ParseBagFile(const string& bag_file,
+                  double* total_distance,
+                  uint64_t* laser_scan_msgs_ptr,
+                  uint64_t* kinect_scan_msgs_ptr,
+                  uint64_t* kinect_image_msgs_ptr,
+                  uint64_t* stargazer_sightings_ptr,
+                  double* bag_duration_ptr,
+                  double* enml_distance) {
   static const double kMinDistance = 30.0;
   static const bool debug = true;
   // printf("Reading %s\n", filename);
   rosbag::Bag bag;
   try {
-    bag.open(filename,rosbag::bagmode::Read);
+    bag.open(bag_file,rosbag::bagmode::Read);
   } catch(rosbag::BagException exception) {
-    printf("Unable to read %s, reason:\n %s\n", filename.c_str(), exception.what());
+    printf("Unable to read %s, reason:\n %s\n", bag_file.c_str(), exception.what());
     return false;
   }
   
@@ -124,11 +137,16 @@ bool GenerateBagfileSynopsis(const string& filename,
   topics.push_back("/stereo/left/image_raw/compressed");
   topics.push_back("/stereo/right/image_raw/compressed");
 
-  topic_mean_rate.push_back(9.997);
-  topic_mean_rate.push_back(10.082);
+  topic_mean_rate.push_back(10);
+  topic_mean_rate.push_back(10);
 
-  topic_std_dev_rate.push_back(0.0151);
-  topic_std_dev_rate.push_back(0.00683);
+  topic_std_dev_rate.push_back(0.015);
+  topic_std_dev_rate.push_back(0.015);
+
+  string synopsis_file = string(bag_file) + string(".synopsis");
+  string log_file      = string(bag_file) + string(".log");
+
+  FILE* log_fp = fopen(log_file.c_str(), "w");
 
   rosbag::View view(bag, rosbag::TopicQuery(topics));
 
@@ -148,7 +166,7 @@ bool GenerateBagfileSynopsis(const string& filename,
   bool using_enml = true;
 
   for (uint32_t i = 0; i < topics.size(); i++){
-    RegisterTopic(topics[i], topic_mean_rate[i], topic_std_dev_rate[i], 10);
+    RegisterTopic(topics[i], topic_mean_rate[i], topic_std_dev_rate[i], 4);
   }
 
   for (rosbag::View::iterator it = view.begin(); it != view.end(); ++it) {
@@ -160,7 +178,7 @@ bool GenerateBagfileSynopsis(const string& filename,
     }
 
     std::string topic = message.getTopic();
-    AddTopicObservation(topic, message);
+    AddTopicObservation(topic, message, log_fp);
   }
   bag_duration = bag_time - bag_time_start;
   const bool is_interesting =
@@ -177,12 +195,13 @@ bool GenerateBagfileSynopsis(const string& filename,
   }
   if (debug) {
     printf("%s %9.1fs %7.1fm %6lu %6lu %9.1fm %6d %6d %d\n",
-           filename.c_str(), bag_duration, distance_traversed,
+           bag_file.c_str(), bag_duration, distance_traversed,
            laser_scan_msgs, kinect_scan_msgs, *total_distance,
            autonomous_steps,
            total_steps, is_interesting?1:0);
   }
-  string synopsis_file = string(filename) + string(".synopsis");
+
+  fclose(log_fp);
 
   FILE* fp = fopen(synopsis_file.c_str(), "w");
   // ScopedFile fp(synopsis_file.c_str(), "w");
@@ -203,7 +222,7 @@ bool GenerateBagfileSynopsis(const string& filename,
           "  total_steps = %d;\n"
           "  using_enml = %s;\n"
           "};\n",
-          filename.c_str(),
+          bag_file.c_str(),
           bag_duration,
           distance_traversed,
           laser_scan_msgs,
@@ -227,10 +246,9 @@ bool GenerateBagfileSynopsis(const string& filename,
 }
 
 int main(int argc, char** argv) {
-
   
   //TODO: parse with YAML file. Currently experiencing some errors with import
-  std::string bag_file = "/home/amrl-husky/Datasets/UTPeDa/110222/1667413740.bag";
+  std::string bag_file = "/home/amrl-husky/Documents/datachecker/temp/test_bag.bag";
 
   rosbag::Bag bag;
   try {
@@ -250,7 +268,7 @@ int main(int argc, char** argv) {
   vector<uint64_t> kinect_images(num_files, 0);
   vector<uint64_t> stargazer_sigtings(num_files, 0);
 
-  GenerateBagfileSynopsis(
+  ParseBagFile(
         bag_file,
         &(distances[0]),
         &(laser_scans[0]),

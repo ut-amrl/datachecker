@@ -1,0 +1,12 @@
+synopsis = {
+  filename = "/home/amrl-husky/Documents/datachecker/temp/test_bag.bag";
+  duration =     686.5;
+  autonomous_distance_traversed =     0.0;
+  laser_msgs = 0;
+  kinect_msgs = 0;
+  kinect_images = 0;
+  stargazer_sightings = 0;
+  autonomous_steps = 0;
+  total_steps = 0;
+  using_enml = true;
+};
