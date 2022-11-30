@@ -22,6 +22,9 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 ROSBUILD_ADD_EXECUTABLE(bagfile_synopsis src/bagfile_synopsis.cc)
+
+TARGET_LINK_LIBRARIES(bagfile_synopsis yaml-cpp)
+
 # ADD_DEPENDENCIES(${target} shared_libraries)
 # TARGET_LINK_LIBRARIES(bagfile_synopsis    shared_libraries
 #     ${libs})

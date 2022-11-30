@@ -1,6 +1,6 @@
 synopsis = {
   filename = "/home/amrl-husky/Documents/datachecker/temp/test_bag.bag";
-  duration =     686.5;
+  duration =     686.6;
   autonomous_distance_traversed =     0.0;
   laser_msgs = 0;
   kinect_msgs = 0;

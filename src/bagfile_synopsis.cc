@@ -56,10 +56,11 @@ struct TopicWindow {
 };
 
 static std::unordered_map<std::string, TopicWindow> topicInfo;
+static std::vector<std::string> topicNames;
 static int total_obs = 0;
 static int invalid_obs = 0;
 
-void RegisterTopic(std::string topicName, double expectedRate, double expectedRateStdDev, int windowSize=10, double stdDevThreshold=10.0) {
+void RegisterTopic(std::string topicName, double expectedRate, double expectedRateStdDev, int windowSize=10, double stdDevThreshold=3.0) {
   TopicWindow info;
   info.windowSize = windowSize;
   info.timestamps = std::deque<double>();
@@ -68,6 +69,8 @@ void RegisterTopic(std::string topicName, double expectedRate, double expectedRa
   info.stdDevThreshold = stdDevThreshold;
 
   topicInfo[topicName] = info;
+
+  topicNames.push_back(topicName);
 }
 
 void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& message, FILE* log_fp){
@@ -94,16 +97,19 @@ void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& m
       invalid_obs += 1;
       
       fprintf(log_fp,
-          "Topic Rate Error\n"
+          "Topic Rate Drop\n"
+          "  time = %2.4f;\n"
           "  topic = \"%s\";\n"
           "  rate_measured = %2.4f;\n"
           "  expected_rate = %2.4f;\n"
           "  expected_rate_std_dev = %2.4f;\n"
-          "};\n",
+          "  window_size = %lu;\n",
+          message.getTime().toSec(),
           topicName.c_str(),
           avgRate,
           topicInfo[topicName].expectedRate,
-          topicInfo[topicName].expectedRateStdDev
+          topicInfo[topicName].expectedRateStdDev,
+          topicInfo[topicName].windowSize
           );
     }
   }
@@ -131,24 +137,19 @@ bool ParseBagFile(const string& bag_file,
   std::vector<std::string> topics;
   std::vector<double> topic_mean_rate;
   std::vector<double> topic_std_dev_rate;
-  
-  //left: average: 9.977, std-dev: 0.0151
-  //right: average: 10.002, std-dev: 0.00683
-  topics.push_back("/stereo/left/image_raw/compressed");
-  topics.push_back("/stereo/right/image_raw/compressed");
 
   topic_mean_rate.push_back(10);
   topic_mean_rate.push_back(10);
 
-  topic_std_dev_rate.push_back(0.015);
-  topic_std_dev_rate.push_back(0.015);
+  topic_std_dev_rate.push_back(0.05);
+  topic_std_dev_rate.push_back(0.05);
 
   string synopsis_file = string(bag_file) + string(".synopsis");
   string log_file      = string(bag_file) + string(".log");
 
   FILE* log_fp = fopen(log_file.c_str(), "w");
 
-  rosbag::View view(bag, rosbag::TopicQuery(topics));
+  rosbag::View view(bag, rosbag::TopicQuery(topicNames));
 
   double bag_time_start = -1.0;
   double bag_time = 0.0;
@@ -165,9 +166,6 @@ bool ParseBagFile(const string& bag_file,
   bool autonomous = false;
   bool using_enml = true;
 
-  for (uint32_t i = 0; i < topics.size(); i++){
-    RegisterTopic(topics[i], topic_mean_rate[i], topic_std_dev_rate[i], 4);
-  }
 
   for (rosbag::View::iterator it = view.begin(); it != view.end(); ++it) {
     const rosbag::MessageInstance& message = *it;
@@ -246,15 +244,27 @@ bool ParseBagFile(const string& bag_file,
 }
 
 int main(int argc, char** argv) {
-  
-  //TODO: parse with YAML file. Currently experiencing some errors with import
-  std::string bag_file = "/home/amrl-husky/Documents/datachecker/temp/test_bag.bag";
+   
+  YAML::Node settings = YAML::LoadFile("/home/amrl-husky/Documents/datachecker/src/settings.yaml");
+  YAML::Node topics = settings["topics"];
+
+  std::string bag_file = settings["bag_file"].as<std::string>();;
 
   rosbag::Bag bag;
   try {
     bag.open(bag_file,rosbag::bagmode::Read);
   } catch(rosbag::BagException exception) {
     return -1;
+  }
+
+  for (const auto& kv : topics) {
+    const YAML::Node& topic_info = kv.second;  // the value
+
+    std::string topic_name = topic_info["name"].as<std::string>();
+    double topic_freq_mean = topic_info["freq_mean"].as<double>();
+    double topic_freq_std_dev = topic_info["freq_std_dev"].as<double>();
+
+    RegisterTopic(topic_name, topic_freq_mean, topic_freq_std_dev);
   }
 
   rosbag::View view(bag); 
