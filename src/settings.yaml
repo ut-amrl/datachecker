@@ -13,19 +13,19 @@ topics:
   vectornav_gps:
       name: "/vectornav/GPS"
       freq_mean: 20.0
-      freq_std_dev: 0.15
+      freq_std_dev: 0.25
 
   vectornav_imu:
       name: "/vectornav/IMU"
       freq_mean: 20.0
-      freq_std_dev: 0.15
+      freq_std_dev: 0.25
 
   vectornav_mag:
       name: "/vectornav/Mag"
       freq_mean: 20.0
-      freq_std_dev: 0.15
+      freq_std_dev: 0.25
 
   vectornav_odom:
       name: "/vectornav/Odom"
       freq_mean: 20.0
-      freq_std_dev: 0.15
+      freq_std_dev: 0.25

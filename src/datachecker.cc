@@ -47,26 +47,30 @@ using std::vector;
 using std::deque;
 
 
-struct TopicWindow {
+struct TopicInfo {
   int windowSize = 0;
   std::deque<double> timestamps;
   double expectedRate;
   double expectedRateStdDev;
   double stdDevThreshold;
+  int numObservations;
+  int numInvalidObservations;
 };
 
-static std::unordered_map<std::string, TopicWindow> topicInfo;
+static std::unordered_map<std::string, TopicInfo> topicInfo;
 static std::vector<std::string> topicNames;
 static int total_obs = 0;
 static int invalid_obs = 0;
 
 void RegisterTopic(std::string topicName, double expectedRate, double expectedRateStdDev, int windowSize=10, double stdDevThreshold=3.0) {
-  TopicWindow info;
+  TopicInfo info;
   info.windowSize = windowSize;
   info.timestamps = std::deque<double>();
   info.expectedRate = expectedRate;
   info.expectedRateStdDev = expectedRateStdDev;
   info.stdDevThreshold = stdDevThreshold;
+  info.numObservations = 0;
+  info.numInvalidObservations = 0;
 
   topicInfo[topicName] = info;
 
@@ -87,6 +91,8 @@ void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& m
   double upperRateBound = expectedRate + expectedRateStdDev * stdDevThreshold;
 
   timestamps.push_back(message.getTime().toSec());
+
+  topicInfo[topicName].numObservations+=1;
 
   if (timestamps.size() > (uint32_t)windowSize) {
     timestamps.pop_front();
@@ -111,6 +117,8 @@ void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& m
           topicInfo[topicName].expectedRateStdDev,
           topicInfo[topicName].windowSize
           );
+
+      topicInfo[topicName].numInvalidObservations+=1;
     }
   }
 }
@@ -133,16 +141,6 @@ bool ParseBagFile(const string& bag_file,
     printf("Unable to read %s, reason:\n %s\n", bag_file.c_str(), exception.what());
     return false;
   }
-  
-  std::vector<std::string> topics;
-  std::vector<double> topic_mean_rate;
-  std::vector<double> topic_std_dev_rate;
-
-  topic_mean_rate.push_back(10);
-  topic_mean_rate.push_back(10);
-
-  topic_std_dev_rate.push_back(0.05);
-  topic_std_dev_rate.push_back(0.05);
 
   string synopsis_file = string(bag_file) + string(".synopsis");
   string log_file      = string(bag_file) + string(".log");
@@ -206,6 +204,15 @@ bool ParseBagFile(const string& bag_file,
   if (fp == NULL) {
     printf("Unable to write to %s\n", synopsis_file.c_str());
     return false;
+  }
+
+  for (const string& topicName : topicNames) {
+    fprintf(fp, "topic: %s\n"
+            "  num_msgs: %lu\n"
+            "  num_invalid_msgs: %lu\n",
+            topicName.c_str(),
+            topicInfo[topicName].numObservations,
+            topicInfo[topicName].numInvalidObservations);
   }
   fprintf(fp,
           "synopsis = {\n"

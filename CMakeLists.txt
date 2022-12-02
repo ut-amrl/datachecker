@@ -21,10 +21,10 @@ SET(ROS_BUILD_SHARED_LIBS false)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-ROSBUILD_ADD_EXECUTABLE(bagfile_synopsis src/bagfile_synopsis.cc)
+ROSBUILD_ADD_EXECUTABLE(datachecker src/datachecker.cc)
 
-TARGET_LINK_LIBRARIES(bagfile_synopsis yaml-cpp)
+TARGET_LINK_LIBRARIES(datachecker yaml-cpp)
 
 # ADD_DEPENDENCIES(${target} shared_libraries)
-# TARGET_LINK_LIBRARIES(bagfile_synopsis    shared_libraries
+# TARGET_LINK_LIBRARIES(datachecker    shared_libraries
 #     ${libs})

@@ -1,3 +1,21 @@
+topic: /stereo/left/image_raw/compressed
+  num_msgs: 6865
+  num_invalid_msgs: 0
+topic: /stereo/right/image_raw/compressed
+  num_msgs: 6865
+  num_invalid_msgs: 0
+topic: /vectornav/GPS
+  num_msgs: 13732
+  num_invalid_msgs: 24
+topic: /vectornav/IMU
+  num_msgs: 13732
+  num_invalid_msgs: 23
+topic: /vectornav/Mag
+  num_msgs: 13731
+  num_invalid_msgs: 24
+topic: /vectornav/Odom
+  num_msgs: 13731
+  num_invalid_msgs: 27
 synopsis = {
   filename = "/home/amrl-husky/Documents/datachecker/temp/test_bag.bag";
   duration =     686.6;
