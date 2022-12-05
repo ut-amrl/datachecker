@@ -50,8 +50,10 @@ using std::deque;
 struct TopicInfo {
   int windowSize = 0;
   std::deque<double> timestamps;
-  double expectedRate;
-  double expectedRateStdDev;
+
+  double expectedPeriod;
+  double expectedPeriodStdDev;
+
   double stdDevThreshold;
   int numObservations;
   int numInvalidObservations;
@@ -62,12 +64,12 @@ static std::vector<std::string> topicNames;
 static int total_obs = 0;
 static int invalid_obs = 0;
 
-void RegisterTopic(std::string topicName, double expectedRate, double expectedRateStdDev, int windowSize=10, double stdDevThreshold=3.0) {
+void RegisterTopic(std::string topicName, double expectedPeriod, double expectedPeriodStdDev, int windowSize=10, double stdDevThreshold=3.0) {
   TopicInfo info;
   info.windowSize = windowSize;
   info.timestamps = std::deque<double>();
-  info.expectedRate = expectedRate;
-  info.expectedRateStdDev = expectedRateStdDev;
+  info.expectedPeriod = expectedPeriod;
+  info.expectedPeriodStdDev = expectedPeriodStdDev;
   info.stdDevThreshold = stdDevThreshold;
   info.numObservations = 0;
   info.numInvalidObservations = 0;
@@ -83,12 +85,12 @@ void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& m
   int windowSize = topicInfo[topicName].windowSize;
   std::deque<double>& timestamps = topicInfo[topicName].timestamps;
 
-  double expectedRate = topicInfo[topicName].expectedRate;
-  double expectedRateStdDev = topicInfo[topicName].expectedRateStdDev;
+  double expectedPeriod = topicInfo[topicName].expectedPeriod;
+  double expectedPeriodStdDev = topicInfo[topicName].expectedPeriodStdDev;
   double stdDevThreshold = topicInfo[topicName].stdDevThreshold;
 
-  double lowerRateBound = expectedRate - expectedRateStdDev * stdDevThreshold;
-  double upperRateBound = expectedRate + expectedRateStdDev * stdDevThreshold;
+  double lowerPeriodBound = expectedPeriod - expectedPeriodStdDev * stdDevThreshold;
+  double upperPeriodBound = expectedPeriod + expectedPeriodStdDev * stdDevThreshold;
 
   timestamps.push_back(message.getTime().toSec());
 
@@ -97,9 +99,9 @@ void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& m
   if (timestamps.size() > (uint32_t)windowSize) {
     timestamps.pop_front();
 
-    double avgRate = (windowSize-1) / (timestamps.back() - timestamps.front());
+    double avgPeriod = (timestamps.back() - timestamps.front()) / (windowSize - 1);
 
-    if (avgRate < lowerRateBound || avgRate > upperRateBound){
+    if (avgPeriod < lowerPeriodBound || avgPeriod > upperPeriodBound){
       invalid_obs += 1;
       
       fprintf(log_fp,
@@ -112,9 +114,9 @@ void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& m
           "  window_size = %lu;\n",
           message.getTime().toSec(),
           topicName.c_str(),
-          avgRate,
-          topicInfo[topicName].expectedRate,
-          topicInfo[topicName].expectedRateStdDev,
+          avgPeriod,
+          topicInfo[topicName].expectedPeriod,
+          topicInfo[topicName].expectedPeriodStdDev,
           topicInfo[topicName].windowSize
           );
 
@@ -268,10 +270,10 @@ int main(int argc, char** argv) {
     const YAML::Node& topic_info = kv.second;  // the value
 
     std::string topic_name = topic_info["name"].as<std::string>();
-    double topic_freq_mean = topic_info["freq_mean"].as<double>();
-    double topic_freq_std_dev = topic_info["freq_std_dev"].as<double>();
+    double topic_period_mean = topic_info["period_mean"].as<double>();
+    double topic_period_std_dev = topic_info["period_std_dev"].as<double>();
 
-    RegisterTopic(topic_name, topic_freq_mean, topic_freq_std_dev);
+    RegisterTopic(topic_name, topic_period_mean, topic_period_std_dev);
   }
 
   rosbag::View view(bag); 

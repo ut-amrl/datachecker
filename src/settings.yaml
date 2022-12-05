@@ -2,30 +2,41 @@ bag_file: "/home/amrl-husky/Documents/datachecker/temp/test_bag.bag"
 topics:
   left_image:
       name: "/stereo/left/image_raw/compressed"
-      freq_mean: 10.0
-      freq_std_dev: 0.15
+      period_mean: 0.1
+      period_std_dev: 0.15
 
   right_image:
       name: "/stereo/right/image_raw/compressed"
-      freq_mean: 10.0
-      freq_std_dev: 0.15
+      period_mean: 0.1
+      period_std_dev: 0.15
 
   vectornav_gps:
       name: "/vectornav/GPS"
-      freq_mean: 20.0
-      freq_std_dev: 0.25
+      period_mean: 0.05
+      period_std_dev: 0.0005
 
   vectornav_imu:
       name: "/vectornav/IMU"
-      freq_mean: 20.0
-      freq_std_dev: 0.25
+      period_mean: 0.05
+      period_std_dev: 0.0005
 
   vectornav_mag:
       name: "/vectornav/Mag"
-      freq_mean: 20.0
-      freq_std_dev: 0.25
+      period_mean: 0.05
+      period_std_dev: 0.0005
 
   vectornav_odom:
       name: "/vectornav/Odom"
-      freq_mean: 20.0
-      freq_std_dev: 0.25
+      period_mean: 0.05
+      period_std_dev: 0.0005
+
+
+  zed_right_info:
+      name: "/zed/zed_node/right/camera_info"
+      period_mean: 0.03571428571
+      period_std_dev: 0.05
+
+  zed_left_info:
+      name: "/zed/zed_node/left/camera_info"
+      period_mean: 0.04
+      period_std_dev: 0.05

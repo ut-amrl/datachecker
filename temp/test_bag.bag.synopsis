@@ -1,24 +1,30 @@
 topic: /stereo/left/image_raw/compressed
-  num_msgs: 6865
+  num_msgs: 85
   num_invalid_msgs: 0
 topic: /stereo/right/image_raw/compressed
-  num_msgs: 6865
+  num_msgs: 85
   num_invalid_msgs: 0
 topic: /vectornav/GPS
-  num_msgs: 13732
-  num_invalid_msgs: 24
+  num_msgs: 171
+  num_invalid_msgs: 3
 topic: /vectornav/IMU
-  num_msgs: 13732
-  num_invalid_msgs: 23
+  num_msgs: 171
+  num_invalid_msgs: 3
 topic: /vectornav/Mag
-  num_msgs: 13731
-  num_invalid_msgs: 24
+  num_msgs: 171
+  num_invalid_msgs: 3
 topic: /vectornav/Odom
-  num_msgs: 13731
-  num_invalid_msgs: 27
+  num_msgs: 171
+  num_invalid_msgs: 3
+topic: /zed/zed_node/right/camera_info
+  num_msgs: 42
+  num_invalid_msgs: 26
+topic: /zed/zed_node/left/camera_info
+  num_msgs: 42
+  num_invalid_msgs: 23
 synopsis = {
   filename = "/home/amrl-husky/Documents/datachecker/temp/test_bag.bag";
-  duration =     686.6;
+  duration =       8.5;
   autonomous_distance_traversed =     0.0;
   laser_msgs = 0;
   kinect_msgs = 0;

@@ -1,686 +1,427 @@
 Topic Rate Drop
-  time = 1667413886.5093;
+  time = 1668893358.0824;
   topic = "/vectornav/IMU";
-  rate_measured = 20.4711;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0484;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413886.5093;
+  time = 1668893358.0824;
   topic = "/vectornav/Mag";
-  rate_measured = 20.4702;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0484;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413886.5094;
+  time = 1668893358.0824;
   topic = "/vectornav/GPS";
-  rate_measured = 20.4698;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0484;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413886.5094;
+  time = 1668893358.0824;
   topic = "/vectornav/Odom";
-  rate_measured = 20.4716;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0484;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413890.8701;
+  time = 1668893359.4345;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2307;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893359.4376;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2306;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893359.4380;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.1861;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893359.8373;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2308;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893359.8402;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2307;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893360.2390;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2233;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893360.2423;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2233;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893360.6397;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2232;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893360.6425;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2231;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893361.0420;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2232;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893361.0447;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2231;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893361.4439;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2232;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893361.4473;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2233;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893361.8473;
   topic = "/vectornav/IMU";
-  rate_measured = 19.5415;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0516;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413890.8701;
+  time = 1668893361.8473;
   topic = "/vectornav/Mag";
-  rate_measured = 19.5410;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0516;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413890.8701;
+  time = 1668893361.8474;
   topic = "/vectornav/GPS";
-  rate_measured = 19.5406;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0516;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413890.8702;
+  time = 1668893361.8474;
   topic = "/vectornav/Odom";
-  rate_measured = 19.5391;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0516;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413891.3095;
+  time = 1668893361.9126;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2306;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893361.9157;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2306;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893361.9160;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.1860;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
+  window_size = 10;
+Topic Rate Drop
+  time = 1668893362.2829;
   topic = "/vectornav/IMU";
-  rate_measured = 20.4817;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0484;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413891.3095;
+  time = 1668893362.2829;
   topic = "/vectornav/Mag";
-  rate_measured = 20.4823;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0484;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413891.3095;
+  time = 1668893362.2829;
   topic = "/vectornav/GPS";
-  rate_measured = 20.4823;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0484;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413891.3095;
+  time = 1668893362.2829;
   topic = "/vectornav/Odom";
-  rate_measured = 20.4838;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  rate_measured = 0.0484;
+  expected_rate = 0.0500;
+  expected_rate_std_dev = 0.0005;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413905.8094;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4520;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893362.3826;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2381;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413905.8094;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4526;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893362.3828;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.1937;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413905.8094;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4527;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893362.3859;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2381;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413905.8094;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4543;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893362.3862;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.1937;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413931.0707;
-  topic = "/vectornav/IMU";
-  rate_measured = 19.5388;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893362.8502;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2456;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413931.0707;
-  topic = "/vectornav/Mag";
-  rate_measured = 19.5367;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893362.8506;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2010;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413931.0707;
-  topic = "/vectornav/GPS";
-  rate_measured = 19.5370;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893362.8530;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2456;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413931.0707;
-  topic = "/vectornav/Odom";
-  rate_measured = 19.5371;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893362.8534;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2010;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413931.5103;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4738;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893363.2521;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2455;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413931.5103;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4758;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893363.2525;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2010;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413931.5103;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4761;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893363.2554;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2456;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413931.5103;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4757;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893363.2558;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2009;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413947.6701;
-  topic = "/vectornav/Odom";
-  rate_measured = 19.5496;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893363.7210;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2530;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413948.1099;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4631;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893363.7213;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2010;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413948.1099;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4649;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893363.7239;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2529;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413948.1099;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4654;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893363.7241;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2009;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413948.1099;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4629;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.1904;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2530;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413956.7104;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4578;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.1905;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2009;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413956.7104;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4590;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.1936;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2531;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413956.7105;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4589;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.1938;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2009;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413956.7105;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4578;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.5919;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2455;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413957.7103;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4642;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.5923;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.1936;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413957.7103;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4695;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.5949;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2454;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413957.7103;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4657;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.5953;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.1936;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413957.7103;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4699;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.9940;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2382;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413966.7102;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4624;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.9944;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.1936;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413966.7103;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4645;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.9980;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2383;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413966.7103;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4649;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893364.9985;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.1937;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413966.7103;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4627;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893365.3968;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2383;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413979.3101;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4545;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893365.4013;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2384;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413979.3101;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4547;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893365.4016;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.1864;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413979.3101;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4549;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893365.7991;
+  topic = "/zed/zed_node/left/camera_info";
+  rate_measured = 0.2309;
+  expected_rate = 0.0400;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
 Topic Rate Drop
-  time = 1667413979.3101;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4552;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413983.5102;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4744;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413983.5102;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4753;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413983.5102;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4742;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413983.5102;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4759;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413991.7710;
-  topic = "/vectornav/IMU";
-  rate_measured = 19.5500;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413991.7710;
-  topic = "/vectornav/Mag";
-  rate_measured = 19.5499;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413991.7710;
-  topic = "/vectornav/GPS";
-  rate_measured = 19.5496;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413991.7711;
-  topic = "/vectornav/Odom";
-  rate_measured = 19.5447;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413992.2107;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4664;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413992.2108;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4673;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413992.2108;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4667;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667413992.2108;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4727;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414001.7108;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4522;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414003.8107;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4502;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414003.8107;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4505;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414007.1713;
-  topic = "/vectornav/IMU";
-  rate_measured = 19.5404;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414007.1713;
-  topic = "/vectornav/Mag";
-  rate_measured = 19.5398;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414007.1714;
-  topic = "/vectornav/GPS";
-  rate_measured = 19.5397;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414007.1714;
-  topic = "/vectornav/Odom";
-  rate_measured = 19.5397;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414007.6110;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4720;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414007.6110;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4725;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414007.6110;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4722;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414007.6110;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4724;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414011.7708;
-  topic = "/vectornav/GPS";
-  rate_measured = 19.5490;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414011.7708;
-  topic = "/vectornav/Odom";
-  rate_measured = 19.5491;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414012.2106;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4620;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414012.2106;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4625;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414012.2106;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4645;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414012.2106;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4647;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414012.6710;
-  topic = "/vectornav/IMU";
-  rate_measured = 19.5491;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414012.6710;
-  topic = "/vectornav/Mag";
-  rate_measured = 19.5490;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414012.6710;
-  topic = "/vectornav/GPS";
-  rate_measured = 19.5487;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414012.6710;
-  topic = "/vectornav/Odom";
-  rate_measured = 19.5485;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414013.1108;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4619;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414013.1108;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4625;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414013.1108;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4616;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414013.1108;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4625;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414022.5106;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4522;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414022.5106;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4530;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414022.5106;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4526;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414022.5106;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4532;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414047.2109;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4514;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414048.6713;
-  topic = "/vectornav/IMU";
-  rate_measured = 19.5469;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414048.6713;
-  topic = "/vectornav/Mag";
-  rate_measured = 19.5468;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414048.6713;
-  topic = "/vectornav/GPS";
-  rate_measured = 19.5467;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414048.6713;
-  topic = "/vectornav/Odom";
-  rate_measured = 19.5467;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414049.1114;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4513;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414049.1114;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4510;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414049.1114;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4502;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414059.5109;
-  topic = "/vectornav/IMU";
-  rate_measured = 20.4678;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414059.5109;
-  topic = "/vectornav/Mag";
-  rate_measured = 20.4679;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414059.5109;
-  topic = "/vectornav/Odom";
-  rate_measured = 20.4717;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
-  window_size = 10;
-Topic Rate Drop
-  time = 1667414059.5109;
-  topic = "/vectornav/GPS";
-  rate_measured = 20.4677;
-  expected_rate = 20.0000;
-  expected_rate_std_dev = 0.1500;
+  time = 1668893365.8036;
+  topic = "/zed/zed_node/right/camera_info";
+  rate_measured = 0.2311;
+  expected_rate = 0.0357;
+  expected_rate_std_dev = 0.0500;
   window_size = 10;
