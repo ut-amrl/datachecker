@@ -40,3 +40,23 @@ topics:
       name: "/zed/zed_node/left/camera_info"
       period_mean: 0.04
       period_std_dev: 0.05
+
+  zed_depth_info:
+      name: "/zed/zed_node/depth/camera_info"
+      period_mean: 0.0666666666
+      period_std_dev: 0.01
+
+  zed_left_image:
+    name: "/zed/zed_node/left/image_rect_color/compressed"
+    period_mean: 0.0666666666
+    period_std_dev: 0.01
+
+  zed_right_image:
+    name: "/zed/zed_node/right/image_rect_color/compressed"
+    period_mean: 0.0666666666
+    period_std_dev: 0.001
+
+  zed_depth:
+    name: "/zed/zed_node/depth/depth_registered/compressedDepth"
+    period_mean: 0.2
+    period_std_dev: 0.02
