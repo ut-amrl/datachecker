@@ -35,10 +35,19 @@
 #include <vector>
 #include <deque>
 #include <unordered_map>
+#include <map>
 #include <yaml-cpp/yaml.h>
 
+#include "sensor_msgs/CameraInfo.h"
+#include "sensor_msgs/CompressedImage.h"
 #include "sensor_msgs/Image.h"
+#include "sensor_msgs/Imu.h"
 #include "sensor_msgs/LaserScan.h"
+#include "sensor_msgs/MagneticField.h"
+#include "sensor_msgs/NavSatFix.h"
+
+#include "nav_msgs/Odometry.h"
+
 #include "rosbag/bag.h"
 #include "rosbag/view.h"
 
@@ -59,6 +68,9 @@ struct TopicInfo {
   double stdDevThreshold;
   int numObservations;
   int numInvalidObservations;
+
+  bool last_seq_num_initialized = false;
+  uint32_t last_seq_num;
 };
 
 static std::unordered_map<std::string, TopicInfo> topicInfo;
@@ -129,7 +141,45 @@ void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& m
   }
 }
 
+class MessageParserBase {
+  public:
+    virtual void ParseMessageInstance(const rosbag::MessageInstance& message_instance, FILE* log_fp) = 0;
+};
+
+template<typename T>
+class MessageParser : public MessageParserBase {
+  public:
+    void ParseMessageInstance(const rosbag::MessageInstance& message_instance, FILE* log_fp){ 
+      if (!message_instance.isType<T>()){
+        std::cout << "Message from topic " << message_instance.getTopic() << " should have type " << message_instance.getDataType() << "\n";
+        exit(-1);
+      }
+
+      boost::shared_ptr<T> msg = message_instance.instantiate<T>();
+      uint32_t seq_num = msg->header.seq;
+      std::string topic = message_instance.getTopic();
+
+      if (topicInfo[topic].last_seq_num_initialized && (topicInfo[topic].last_seq_num + 1 != seq_num)){
+        fprintf(log_fp,
+          "Topic SeqNum Skip\n"
+          "  time = %2.4f;\n"
+          "  topic = \"%s\";\n"
+          "  prev_seq_num = %lu;\n"
+          "  current_seq_num = %lu;\n",
+          message_instance.getTime().toSec(),
+          topic.c_str(),
+          (unsigned long)topicInfo[topic].last_seq_num,
+          (unsigned long)seq_num
+          );
+      }
+
+      topicInfo[topic].last_seq_num = seq_num;
+      topicInfo[topic].last_seq_num_initialized = true;
+    }
+};
+
 bool ParseBagFile(const string& bag_file,
+                  std::map<std::string, MessageParserBase*> msg_parser_map,
                   double* total_distance,
                   uint64_t* laser_scan_msgs_ptr,
                   uint64_t* kinect_scan_msgs_ptr,
@@ -180,6 +230,14 @@ bool ParseBagFile(const string& bag_file,
     }
 
     std::string topic = message.getTopic();
+    if (msg_parser_map.find(message.getDataType()) == msg_parser_map.end()){
+      std::cout << "Messages of type " << message.getDataType()  << " are not registered" << "\n";
+      exit(-1);
+    }
+
+    MessageParserBase* parser = msg_parser_map[message.getDataType()];
+    parser->ParseMessageInstance(message, log_fp);
+    
     AddTopicObservation(topic, message, log_fp);
   }
 
@@ -246,12 +304,13 @@ int main(int argc, char** argv) {
   YAML::Node settings = YAML::LoadFile("/home/amrl-husky/Documents/datachecker/src/settings.yaml");
   YAML::Node topics = settings["topics"];
 
-  std::string bag_file = settings["bag_file"].as<std::string>();;
+  std::string bag_file = settings["bag_file"].as<std::string>();
 
   rosbag::Bag bag;
   try {
     bag.open(bag_file,rosbag::bagmode::Read);
   } catch(rosbag::BagException exception) {
+    std::cout << "Could not open bag file: " << settings["bag_file"].as<std::string>() << "\n";
     return -1;
   }
 
@@ -261,7 +320,6 @@ int main(int argc, char** argv) {
     std::string topic_name = topic_info["name"].as<std::string>();
     double topic_period_mean = topic_info["period_mean"].as<double>();
     double topic_period_std_dev = topic_info["period_std_dev"].as<double>();
-
     RegisterTopic(topic_name, topic_period_mean, topic_period_std_dev);
   }
 
@@ -276,8 +334,21 @@ int main(int argc, char** argv) {
   vector<uint64_t> kinect_images(num_files, 0);
   vector<uint64_t> stargazer_sigtings(num_files, 0);
 
+  std::map<std::string, MessageParserBase*> msg_parser_map;
+
+  msg_parser_map["sensor_msgs/CameraInfo"]      = new MessageParser<sensor_msgs::CameraInfo>();
+  msg_parser_map["sensor_msgs/CompressedImage"] = new MessageParser<sensor_msgs::CompressedImage>();
+  msg_parser_map["sensor_msgs/Image"]           = new MessageParser<sensor_msgs::Image>();
+  msg_parser_map["sensor_msgs/Imu"]             = new MessageParser<sensor_msgs::Imu>();
+  msg_parser_map["sensor_msgs/MagneticField"]   = new MessageParser<sensor_msgs::MagneticField>();
+  msg_parser_map["sensor_msgs/NavSatFix"]       = new MessageParser<sensor_msgs::NavSatFix>();
+
+  msg_parser_map["nav_msgs/Odometry"]           = new MessageParser<nav_msgs::Odometry>();
+
+
   ParseBagFile(
         bag_file,
+        msg_parser_map,
         &(distances[0]),
         &(laser_scans[0]),
         &(kinect_scans[0]),
