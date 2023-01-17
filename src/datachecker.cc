@@ -42,6 +42,8 @@
 #include "rosbag/bag.h"
 #include "rosbag/view.h"
 
+#include "std_msgs/Header.h"
+
 using std::string;
 using std::vector;
 using std::deque;
@@ -109,11 +111,13 @@ void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& m
           "  time = %2.4f;\n"
           "  topic = \"%s\";\n"
           "  rate_measured = %2.4f;\n"
-          "  expected_rate = %2.4f;\n"
-          "  expected_rate_std_dev = %2.4f;\n"
+          "  period_measured = %2.4f;\n"
+          "  expected_period = %2.4f;\n"
+          "  expected_period_std_dev = %2.4f;\n"
           "  window_size = %lu;\n",
           message.getTime().toSec(),
           topicName.c_str(),
+          1.0 / avgPeriod,
           avgPeriod,
           topicInfo[topicName].expectedPeriod,
           topicInfo[topicName].expectedPeriodStdDev,
@@ -166,9 +170,9 @@ bool ParseBagFile(const string& bag_file,
   bool autonomous = false;
   bool using_enml = true;
 
-
   for (rosbag::View::iterator it = view.begin(); it != view.end(); ++it) {
     const rosbag::MessageInstance& message = *it;
+
     bag_time = message.getTime().toSec();
     if (bag_time_start < 0.0) {
       // Initialize bag starting time.
@@ -178,26 +182,11 @@ bool ParseBagFile(const string& bag_file,
     std::string topic = message.getTopic();
     AddTopicObservation(topic, message, log_fp);
   }
+
   bag_duration = bag_time - bag_time_start;
   const bool is_interesting =
       distance_traversed > kMinDistance &&
       (laser_scan_msgs > 0 || kinect_scan_msgs > 0);
-  if (is_interesting) {
-    *total_distance = *total_distance + distance_traversed;
-    // Create a dummy file ".lta_interesting" to indicate that this bag file
-    // is of interest for long-term autonomy (lta).
-    // string interest_file = string(filename) + string(".lta_interesting");
-    // ScopedFile fp(interest_file.c_str(), "w");
-    // // Write a single byte, the newline character.
-    // fprintf(fp, "\n");
-  }
-  if (debug) {
-    printf("%s %9.1fs %7.1fm %6lu %6lu %9.1fm %6d %6d %d\n",
-           bag_file.c_str(), bag_duration, distance_traversed,
-           laser_scan_msgs, kinect_scan_msgs, *total_distance,
-           autonomous_steps,
-           total_steps, is_interesting?1:0);
-  }
 
   fclose(log_fp);
 
