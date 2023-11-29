@@ -2,6 +2,10 @@
 
 Datachecker for Bag Files. Checks topics defined in an input yaml file to ensure the messages from these topics are being published close to an expected frequency. Will notify in output for unexpected increases/decreases in frequency rate and skipped messages based on message id. To run (1) configure settings.yaml to your desired bag file/topics, build project, and run ./datachecker. 
 
+## Dependencies
+- [ROS](http://wiki.ros.org/ROS/Installation) (tested on Noetic)
+- [Ouster Drivers](https://github.com/ouster-lidar/ouster-ros)
+
 ## Input Configuration
 Settings.yaml is configured with (1) bag_file - a string argument on what bag file to use, (2) topics - a list of topics defined by their name, expected rate, and std dev in the expected rate
 

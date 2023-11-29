@@ -1,30 +1,43 @@
-PROJECT(datachecker)
-CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.0.2)
+project(datachecker)
 
+add_compile_options(-std=c++11)
 
-SET(CMAKE_AUTOMOC ON)
-SET(CMAKE_AUTORCC ON)
-SET(CMAKE_AUTOUIC ON)
+find_package(yaml-cpp REQUIRED)
 
-IF(CMAKE_VERSION VERSION_LESS "3.7.0")
-    SET(CMAKE_INCLUDE_CURRENT_DIR ON)
-ENDIF()
+find_package(catkin REQUIRED COMPONENTS
+  ouster_ros std_msgs sensor_msgs roscpp rosbag rosbag
+  # other ROS packages you use
+)
 
-SET(CMAKE_CXX_FLAGS "-std=c++11 -march=native -Wall -Wno-unused-function -g -rdynamic")
+catkin_package(
+  INCLUDE_DIRS
+    ${_ouster_ros_INCLUDE_DIRS}
+    # ${YAML_CPP_INCLUDE_DIRS}
+  LIBRARIES 
+    datachecker
+    ouster_ros
+  CATKIN_DEPENDS 
+    ouster_ros
+    roscpp
+    rosbag
+    message_runtime
+    std_msgs
+    sensor_msgs
+    geometry_msgs
+  # other ROS packages
+  # DEPENDS system_lib
+)
 
-INCLUDE($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
-rosbuild_init()
-SET(ROS_BUILD_STATIC_LIBS true)
-SET(ROS_BUILD_SHARED_LIBS false)
+include_directories(
+  # include
+  ${catkin_INCLUDE_DIRS}
+  ${YAML_CPP_INCLUDE_DIRS}
+)
 
+add_executable(${PROJECT_NAME}_node src/datachecker.cpp)
 
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-
-ROSBUILD_ADD_EXECUTABLE(datachecker src/datachecker.cc)
-
-TARGET_LINK_LIBRARIES(datachecker yaml-cpp)
-
-# ADD_DEPENDENCIES(${target} shared_libraries)
-# TARGET_LINK_LIBRARIES(datachecker    shared_libraries
-#     ${libs})
+target_link_libraries(${PROJECT_NAME}_node
+  ${catkin_LIBRARIES}
+  ${YAML_CPP_LIBRARIES}
+)

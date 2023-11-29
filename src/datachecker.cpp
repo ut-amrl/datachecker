@@ -38,6 +38,8 @@
 #include <map>
 #include <yaml-cpp/yaml.h>
 
+#include "ros/ros.h"
+#include "ouster_ros/PacketMsg.h"
 #include "sensor_msgs/CameraInfo.h"
 #include "sensor_msgs/CompressedImage.h"
 #include "sensor_msgs/Image.h"
@@ -57,17 +59,16 @@ using std::string;
 using std::vector;
 using std::deque;
 
-
 struct TopicInfo {
-  int windowSize = 0;
+  size_t windowSize = 0;
   std::deque<double> timestamps;
 
   double expectedPeriod;
   double expectedPeriodStdDev;
 
   double stdDevThreshold;
-  int numObservations;
-  int numInvalidObservations;
+  size_t numObservations;
+  size_t numInvalidObservations;
 
   bool last_seq_num_initialized = false;
   uint32_t last_seq_num;
@@ -193,7 +194,7 @@ bool ParseBagFile(const string& bag_file,
   rosbag::Bag bag;
   try {
     bag.open(bag_file,rosbag::bagmode::Read);
-  } catch(rosbag::BagException exception) {
+  } catch(rosbag::BagException const& exception) {
     printf("Unable to read %s, reason:\n %s\n", bag_file.c_str(), exception.what());
     return false;
   }
@@ -217,7 +218,7 @@ bool ParseBagFile(const string& bag_file,
   bag_duration = 0.0;
   uint32_t autonomous_steps = 0;
   uint32_t total_steps = 0;
-  bool autonomous = false;
+  // bool autonomous = false;
   bool using_enml = true;
 
   for (rosbag::View::iterator it = view.begin(); it != view.end(); ++it) {
@@ -300,16 +301,25 @@ bool ParseBagFile(const string& bag_file,
 }
 
 int main(int argc, char** argv) {
-   
-  YAML::Node settings = YAML::LoadFile("/home/amrl-husky/Documents/datachecker/src/settings.yaml");
+  // ROS node init
+  ros::init(argc, argv, "datachecker_node");
+  ros::NodeHandle nh("~");
+
+  std::string config_file;
+  nh.getParam("config_file", config_file);
+  ROS_INFO("Loading config file: %s", config_file.c_str());
+
+  YAML::Node settings = YAML::LoadFile(config_file);
   YAML::Node topics = settings["topics"];
+
+  ROS_INFO("Finished loading config file");
 
   std::string bag_file = settings["bag_file"].as<std::string>();
 
   rosbag::Bag bag;
   try {
     bag.open(bag_file,rosbag::bagmode::Read);
-  } catch(rosbag::BagException exception) {
+  } catch(rosbag::BagException const& exception) {
     std::cout << "Could not open bag file: " << settings["bag_file"].as<std::string>() << "\n";
     return -1;
   }
@@ -336,6 +346,7 @@ int main(int argc, char** argv) {
 
   std::map<std::string, MessageParserBase*> msg_parser_map;
 
+  // msg_parser_map["ouster/lidar_packets"]        = new MessageParser<ouster_ros::PacketMsg>();
   msg_parser_map["sensor_msgs/CameraInfo"]      = new MessageParser<sensor_msgs::CameraInfo>();
   msg_parser_map["sensor_msgs/CompressedImage"] = new MessageParser<sensor_msgs::CompressedImage>();
   msg_parser_map["sensor_msgs/Image"]           = new MessageParser<sensor_msgs::Image>();
@@ -356,6 +367,14 @@ int main(int argc, char** argv) {
         &(stargazer_sigtings[0]),
         &(durations[0]),
         &(enml_distances[0]));
+
+  ros::Rate loop(1);
+  while(ros::ok()){
+    //do some computations and publish messages
+    // std::cout << settings['bag_file'] << '\n';
+    loop.sleep();
+    ros::spinOnce();
+  }
 
   return 0;
 }

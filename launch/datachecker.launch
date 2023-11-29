@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="config" default="ecocar_settings.yaml" doc="config yaml file to use for data checking."/>
+
+	<node pkg="datachecker" type="datachecker_node" name="datachecker_node" output="screen" >
+      <param name="config_file" value="$(find datachecker)/config/$(arg config)" />
+	</node>	
+	
+</launch>

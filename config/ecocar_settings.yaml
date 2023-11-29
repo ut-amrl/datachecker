@@ -1,0 +1,36 @@
+bag_file: "/media/arthur/ExtremePro/EcoCAR/ParkingLotDataset/_2023-11-20-11-03-54.bag"
+topics:
+  # lidar_packets:
+  #   name: "/ouster/lidar_packets"
+  #   period_mean: 0.00078125
+  #   period_std_dev: 0.00005
+
+  left_image:
+    name: "/stereo/left/image_raw"
+    period_mean: 0.1
+    period_std_dev: 0.15
+
+  right_image:
+    name: "/stereo/right/image_raw"
+    period_mean: 0.1
+    period_std_dev: 0.15
+
+  vectornav_gps:
+    name: "/vectornav/GPS"
+    period_mean: 0.005
+    period_std_dev: 0.0001
+
+  vectornav_imu:
+    name: "/vectornav/IMU"
+    period_mean: 0.005
+    period_std_dev: 0.0001
+
+  vectornav_mag:
+    name: "/vectornav/Mag"
+    period_mean: 0.005
+    period_std_dev: 0.0001
+
+  vectornav_odom:
+    name: "/vectornav/Odom"
+    period_mean: 0.005
+    period_std_dev: 0.0001
