@@ -301,7 +301,7 @@ bool ParseBagFile(const string& bag_file,
 
 int main(int argc, char** argv) {
    
-  YAML::Node settings = YAML::LoadFile("/home/amrl-husky/Documents/datachecker/src/settings.yaml");
+  YAML::Node settings = YAML::LoadFile("/home/datachecker/src/settings.yaml");
   YAML::Node topics = settings["topics"];
 
   std::string bag_file = settings["bag_file"].as<std::string>();

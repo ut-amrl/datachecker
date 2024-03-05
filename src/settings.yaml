@@ -1,4 +1,4 @@
-bag_file: "/home/amrl-husky/Documents/datachecker/temp/1671031587.bag"
+bag_file: "/home/datachecker/ros_bag.bag"
 topics:
   left_image:
       name: "/stereo/left/image_raw/compressed"
