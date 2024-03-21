@@ -10,7 +10,7 @@ IF(CMAKE_VERSION VERSION_LESS "3.7.0")
     SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 ENDIF()
 
-SET(CMAKE_CXX_FLAGS "-std=c++11 -march=native -Wall -Wno-unused-function -g -rdynamic")
+SET(CMAKE_CXX_FLAGS "-std=c++14 -march=native -Wall -Wno-unused-function -g -rdynamic")
 
 INCLUDE($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 rosbuild_init()

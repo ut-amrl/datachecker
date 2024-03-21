@@ -1,62 +1,73 @@
-bag_file: "/home/datachecker/ros_bag.bag"
 topics:
   left_image:
       name: "/stereo/left/image_raw/compressed"
       period_mean: 0.1
       period_std_dev: 0.15
+      topic_type: "CompressedImage"
 
   right_image:
       name: "/stereo/right/image_raw/compressed"
       period_mean: 0.1
       period_std_dev: 0.15
+      topic_type: "CompressedImage"
 
   vectornav_gps:
       name: "/vectornav/GPS"
       period_mean: 0.05
       period_std_dev: 0.0005
+      topic_type: "NavSatFix"
 
   vectornav_imu:
       name: "/vectornav/IMU"
       period_mean: 0.05
       period_std_dev: 0.0005
+      topic_type: "Imu"
 
   vectornav_mag:
       name: "/vectornav/Mag"
       period_mean: 0.05
       period_std_dev: 0.0005
+      topic_type: "MagneticField"
 
   vectornav_odom:
       name: "/vectornav/Odom"
       period_mean: 0.05
       period_std_dev: 0.0005
+      topic_type: "Odometry"
 
 
   zed_right_info:
       name: "/zed/zed_node/right/camera_info"
       period_mean: 0.03571428571
       period_std_dev: 0.05
+      topic_type: "CameraInfo"
 
   zed_left_info:
       name: "/zed/zed_node/left/camera_info"
       period_mean: 0.04
       period_std_dev: 0.05
+      topic_type: "CameraInfo"
 
   zed_depth_info:
       name: "/zed/zed_node/depth/camera_info"
       period_mean: 0.0666666666
       period_std_dev: 0.01
+      topic_type: "CameraInfo"
 
   zed_left_image:
     name: "/zed/zed_node/left/image_rect_color/compressed"
     period_mean: 0.0666666666
     period_std_dev: 0.01
+    topic_type: "CompressedImage"
 
   zed_right_image:
     name: "/zed/zed_node/right/image_rect_color/compressed"
     period_mean: 0.0666666666
     period_std_dev: 0.001
+    topic_type: "CompressedImage"
 
   zed_depth:
     name: "/zed/zed_node/depth/depth_registered/compressedDepth"
     period_mean: 0.2
     period_std_dev: 0.02
+    topic_type: "CompressedImage"

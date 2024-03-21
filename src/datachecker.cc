@@ -48,10 +48,14 @@
 
 #include "nav_msgs/Odometry.h"
 
+#include "ros/ros.h"
 #include "rosbag/bag.h"
 #include "rosbag/view.h"
 
 #include "std_msgs/Header.h"
+
+// Custom imports
+#include "generic_message.h"
 
 using std::string;
 using std::vector;
@@ -93,210 +97,120 @@ void RegisterTopic(std::string topicName, double expectedPeriod, double expected
   topicNames.push_back(topicName);
 }
 
-void AddTopicObservation(std::string topicName, const rosbag::MessageInstance& message, FILE* log_fp){
-  total_obs+=1;
+template <typename T>
+void AddTopicObservation(std::string topicName, const T& message, FILE* log_fp){
+  /**
+    TODO: Implement this using an interface class.
+  */
+  // total_obs+=1;
 
-  int windowSize = topicInfo[topicName].windowSize;
-  std::deque<double>& timestamps = topicInfo[topicName].timestamps;
+  // int windowSize = topicInfo[topicName].windowSize;
+  // std::deque<double>& timestamps = topicInfo[topicName].timestamps;
 
-  double expectedPeriod = topicInfo[topicName].expectedPeriod;
-  double expectedPeriodStdDev = topicInfo[topicName].expectedPeriodStdDev;
-  double stdDevThreshold = topicInfo[topicName].stdDevThreshold;
+  // double expectedPeriod = topicInfo[topicName].expectedPeriod;
+  // double expectedPeriodStdDev = topicInfo[topicName].expectedPeriodStdDev;
+  // double stdDevThreshold = topicInfo[topicName].stdDevThreshold;
 
-  double lowerPeriodBound = expectedPeriod - expectedPeriodStdDev * stdDevThreshold;
-  double upperPeriodBound = expectedPeriod + expectedPeriodStdDev * stdDevThreshold;
+  // double lowerPeriodBound = expectedPeriod - expectedPeriodStdDev * stdDevThreshold;
+  // double upperPeriodBound = expectedPeriod + expectedPeriodStdDev * stdDevThreshold;
 
-  timestamps.push_back(message.getTime().toSec());
+  // timestamps.push_back(message.getTime().toSec());
 
-  topicInfo[topicName].numObservations+=1;
+  // topicInfo[topicName].numObservations+=1;
 
-  if (timestamps.size() > (uint32_t)windowSize) {
-    timestamps.pop_front();
+  // if (timestamps.size() > (uint32_t)windowSize) {
+  //   timestamps.pop_front();
 
-    double avgPeriod = (timestamps.back() - timestamps.front()) / (windowSize - 1);
+  //   double avgPeriod = (timestamps.back() - timestamps.front()) / (windowSize - 1);
 
-    if (avgPeriod < lowerPeriodBound || avgPeriod > upperPeriodBound){
-      invalid_obs += 1;
+  //   if (avgPeriod < lowerPeriodBound || avgPeriod > upperPeriodBound){
+  //     invalid_obs += 1;
       
-      fprintf(log_fp,
-          "Topic Rate Drop\n"
-          "  time = %2.4f;\n"
-          "  topic = \"%s\";\n"
-          "  rate_measured = %2.4f;\n"
-          "  period_measured = %2.4f;\n"
-          "  expected_period = %2.4f;\n"
-          "  expected_period_std_dev = %2.4f;\n"
-          "  window_size = %lu;\n",
-          message.getTime().toSec(),
-          topicName.c_str(),
-          1.0 / avgPeriod,
-          avgPeriod,
-          topicInfo[topicName].expectedPeriod,
-          topicInfo[topicName].expectedPeriodStdDev,
-          topicInfo[topicName].windowSize
-          );
+  //     fprintf(log_fp,
+  //         "Topic Rate Drop\n"
+  //         "  time = %2.4f;\n"
+  //         "  topic = \"%s\";\n"
+  //         "  rate_measured = %2.4f;\n"
+  //         "  period_measured = %2.4f;\n"
+  //         "  expected_period = %2.4f;\n"
+  //         "  expected_period_std_dev = %2.4f;\n"
+  //         "  window_size = %lu;\n",
+  //         message.getTime().toSec(),
+  //         topicName.c_str(),
+  //         1.0 / avgPeriod,
+  //         avgPeriod,
+  //         topicInfo[topicName].expectedPeriod,
+  //         topicInfo[topicName].expectedPeriodStdDev,
+  //         topicInfo[topicName].windowSize
+  //         );
 
-      topicInfo[topicName].numInvalidObservations+=1;
-    }
-  }
+  //     topicInfo[topicName].numInvalidObservations+=1;
+  //   }
+  // }
 }
 
-class MessageParserBase {
-  public:
-    virtual void ParseMessageInstance(const rosbag::MessageInstance& message_instance, FILE* log_fp) = 0;
-};
+template<typename T>
+void ParseMessageInstance(const T& msg, FILE* log_fp){ 
+  /*
+    Writes the message high level contents to a file
+    time
+    topic
+    prev_seq_num
+    current_seq_num
+    package_size
+
+    TODO: Implement this after converting the templated T message to a interface with overloaded functions for
+    getTime()
+    getTopic()
+    getSeqNum()
+    getSize()
+  */
+  // uint32_t seq_num = msg.header.seq;
+  // std::string topic = msg.getTopic();
+
+  // if (topicInfo[topic].last_seq_num_initialized && (topicInfo[topic].last_seq_num + 1 != seq_num)){
+  //   fprintf(log_fp,
+  //     "Topic SeqNum Skip\n"
+  //     "  time = %2.4f;\n"
+  //     "  topic = \"%s\";\n"
+  //     "  prev_seq_num = %lu;\n"
+  //     "  current_seq_num = %lu;\n",
+  //     msg.getTime().toSec(),
+  //     topic.c_str(),
+  //     (unsigned long)topicInfo[topic].last_seq_num,
+  //     (unsigned long)seq_num
+  //     );
+  // }
+  ROS_INFO("Message Received with %s", msg.header.frame_id.c_str());
+
+  // topicInfo[topic].last_seq_num = seq_num;
+  // topicInfo[topic].last_seq_num_initialized = true;
+}
 
 template<typename T>
-class MessageParser : public MessageParserBase {
-  public:
-    void ParseMessageInstance(const rosbag::MessageInstance& message_instance, FILE* log_fp){ 
-      if (!message_instance.isType<T>()){
-        std::cout << "Message from topic " << message_instance.getTopic() << " should have type " << message_instance.getDataType() << "\n";
-        exit(-1);
-      }
+void messageCallback(const T& msg, const std::string topic_name, FILE* log_fp)
+{
+  // TODO: Convert msg to interface class
 
-      boost::shared_ptr<T> msg = message_instance.instantiate<T>();
-      uint32_t seq_num = msg->header.seq;
-      std::string topic = message_instance.getTopic();
+  // Check for timestamp and make sure that we are getting everything at the right frequency
+  AddTopicObservation(topic_name, msg, log_fp); // TODO: edit the function a bit to take in the header timestamp
+  // Check for sequence number and make sure that we are not skipping any packets
+  ROS_INFO("messageCallback with topic %s:", topic_name.c_str());
+  ParseMessageInstance(msg, log_fp);
+}
 
-      if (topicInfo[topic].last_seq_num_initialized && (topicInfo[topic].last_seq_num + 1 != seq_num)){
-        fprintf(log_fp,
-          "Topic SeqNum Skip\n"
-          "  time = %2.4f;\n"
-          "  topic = \"%s\";\n"
-          "  prev_seq_num = %lu;\n"
-          "  current_seq_num = %lu;\n",
-          message_instance.getTime().toSec(),
-          topic.c_str(),
-          (unsigned long)topicInfo[topic].last_seq_num,
-          (unsigned long)seq_num
-          );
-      }
+void dummyFunc(const sensor_msgs::CompressedImageConstPtr& msg ) {
+    ROS_INFO("DUMMY");
+}
 
-      topicInfo[topic].last_seq_num = seq_num;
-      topicInfo[topic].last_seq_num_initialized = true;
-    }
-};
-
-bool ParseBagFile(const string& bag_file,
-                  std::map<std::string, MessageParserBase*> msg_parser_map,
-                  double* total_distance,
-                  uint64_t* laser_scan_msgs_ptr,
-                  uint64_t* kinect_scan_msgs_ptr,
-                  uint64_t* kinect_image_msgs_ptr,
-                  uint64_t* stargazer_sightings_ptr,
-                  double* bag_duration_ptr,
-                  double* enml_distance) {
-  static const double kMinDistance = 30.0;
-  static const bool debug = true;
-  // printf("Reading %s\n", filename);
-  rosbag::Bag bag;
-  try {
-    bag.open(bag_file,rosbag::bagmode::Read);
-  } catch(rosbag::BagException exception) {
-    printf("Unable to read %s, reason:\n %s\n", bag_file.c_str(), exception.what());
-    return false;
-  }
-
-  string synopsis_file = string(bag_file) + string(".synopsis");
-  string log_file      = string(bag_file) + string(".log");
-
-  FILE* log_fp = fopen(log_file.c_str(), "w");
-
-  rosbag::View view(bag, rosbag::TopicQuery(topicNames));
-
-  double bag_time_start = -1.0;
-  double bag_time = 0.0;
-  double distance_traversed = 0.0;
-  uint64_t& laser_scan_msgs = *laser_scan_msgs_ptr;
-  uint64_t& kinect_scan_msgs = *kinect_scan_msgs_ptr;
-  double& bag_duration = *bag_duration_ptr;
-  laser_scan_msgs = 0;
-  kinect_scan_msgs = 0;
-  *total_distance = 0;
-  bag_duration = 0.0;
-  uint32_t autonomous_steps = 0;
-  uint32_t total_steps = 0;
-  bool autonomous = false;
-  bool using_enml = true;
-
-  for (rosbag::View::iterator it = view.begin(); it != view.end(); ++it) {
-    const rosbag::MessageInstance& message = *it;
-
-    bag_time = message.getTime().toSec();
-    if (bag_time_start < 0.0) {
-      // Initialize bag starting time.
-      bag_time_start = bag_time;
-    }
-
-    std::string topic = message.getTopic();
-    if (msg_parser_map.find(message.getDataType()) == msg_parser_map.end()){
-      std::cout << "Messages of type " << message.getDataType()  << " are not registered" << "\n";
-      exit(-1);
-    }
-
-    MessageParserBase* parser = msg_parser_map[message.getDataType()];
-    parser->ParseMessageInstance(message, log_fp);
-    
-    AddTopicObservation(topic, message, log_fp);
-  }
-
-  bag_duration = bag_time - bag_time_start;
-  const bool is_interesting =
-      distance_traversed > kMinDistance &&
-      (laser_scan_msgs > 0 || kinect_scan_msgs > 0);
-
-  fclose(log_fp);
-
-  FILE* fp = fopen(synopsis_file.c_str(), "w");
-  // ScopedFile fp(synopsis_file.c_str(), "w");
-  if (fp == NULL) {
-    printf("Unable to write to %s\n", synopsis_file.c_str());
-    return false;
-  }
-
-  for (const string& topicName : topicNames) {
-    fprintf(fp, "topic: %s\n"
-            "  num_msgs: %lu\n"
-            "  num_invalid_msgs: %lu\n",
-            topicName.c_str(),
-            topicInfo[topicName].numObservations,
-            topicInfo[topicName].numInvalidObservations);
-  }
-  fprintf(fp,
-          "synopsis = {\n"
-          "  filename = \"%s\";\n"
-          "  duration = %9.1f;\n"
-          "  autonomous_distance_traversed = %7.1f;\n"
-          "  laser_msgs = %lu;\n"
-          "  kinect_msgs = %lu;\n"
-          "  kinect_images = %lu;\n"
-          "  stargazer_sightings = %lu;\n"
-          "  autonomous_steps = %d;\n"
-          "  total_steps = %d;\n"
-          "  using_enml = %s;\n"
-          "};\n",
-          bag_file.c_str(),
-          bag_duration,
-          distance_traversed,
-          laser_scan_msgs,
-          kinect_scan_msgs,
-          (*kinect_image_msgs_ptr),
-          (*stargazer_sightings_ptr),
-          autonomous_steps,
-          total_steps,
-          using_enml ? "true" : "false");
-  fclose(fp);
-  if (!is_interesting) {
-    bag_duration = 0.0;
-    laser_scan_msgs = 0;
-  }
-  if (using_enml) {
-    *enml_distance = distance_traversed;
-  } else {
-    *enml_distance = 0;
-  }
-  return is_interesting;
+template<typename MessageType>
+void subscribeToTopic(const std::string& topic_name, int queue_size, ros::NodeHandle& n, 
+                      FILE* log_fp, std::vector<ros::Subscriber>& subscribers) {
+    auto callback = [topic_name, log_fp](const boost::shared_ptr<const MessageType>& msg) {
+        ROS_INFO("Callback for topic %s", topic_name.c_str());
+        messageCallback(*msg, topic_name, log_fp);
+    };
+    subscribers.push_back(n.subscribe<MessageType>(topic_name, queue_size, callback));
 }
 
 int main(int argc, char** argv) {
@@ -304,16 +218,23 @@ int main(int argc, char** argv) {
   YAML::Node settings = YAML::LoadFile("/home/datachecker/src/settings.yaml");
   YAML::Node topics = settings["topics"];
 
-  std::string bag_file = settings["bag_file"].as<std::string>();
+  ros::init(argc, argv, "datachecker");
+  ros::NodeHandle n;
 
-  rosbag::Bag bag;
-  try {
-    bag.open(bag_file,rosbag::bagmode::Read);
-  } catch(rosbag::BagException exception) {
-    std::cout << "Could not open bag file: " << settings["bag_file"].as<std::string>() << "\n";
-    return -1;
-  }
+  // TODO: Change this to use current datetime instead
+  std::string log_file      = string("datachecker_test") + string(".log");
+  FILE* log_fp = fopen(log_file.c_str(), "w");
 
+   std::map<std::string, std::function<void(const std::string&, int, ros::NodeHandle&, FILE*, std::vector<ros::Subscriber>&)>> subscriberMap = {
+      {"CompressedImage", &subscribeToTopic<sensor_msgs::CompressedImage>},
+      {"NavSatFix", &subscribeToTopic<sensor_msgs::NavSatFix>},
+      {"Imu", &subscribeToTopic<sensor_msgs::Imu>},
+      {"MagneticField", &subscribeToTopic<sensor_msgs::MagneticField>},
+      {"Odometry", &subscribeToTopic<nav_msgs::Odometry>},
+      {"CameraInfo", &subscribeToTopic<sensor_msgs::CameraInfo>}
+  };
+
+  std::vector<ros::Subscriber> subscribers;
   for (const auto& kv : topics) {
     const YAML::Node& topic_info = kv.second;  // the value
 
@@ -321,41 +242,21 @@ int main(int argc, char** argv) {
     double topic_period_mean = topic_info["period_mean"].as<double>();
     double topic_period_std_dev = topic_info["period_std_dev"].as<double>();
     RegisterTopic(topic_name, topic_period_mean, topic_period_std_dev);
+
+    std::string topic_type = topic_info["topic_type"].as<std::string>();
+    ROS_INFO("Found topic name %s", topic_name.c_str());
+    subscriberMap[topic_type](topic_name, 1, n, log_fp, subscribers);
   }
 
-  rosbag::View view(bag); 
-
-  int num_files = 1;
-  vector<double> distances(num_files, 0.0);
-  vector<double> enml_distances(num_files, 0.0);
-  vector<double> durations(num_files, 0.0);
-  vector<uint64_t> laser_scans(num_files, 0);
-  vector<uint64_t> kinect_scans(num_files, 0);
-  vector<uint64_t> kinect_images(num_files, 0);
-  vector<uint64_t> stargazer_sigtings(num_files, 0);
-
-  std::map<std::string, MessageParserBase*> msg_parser_map;
-
-  msg_parser_map["sensor_msgs/CameraInfo"]      = new MessageParser<sensor_msgs::CameraInfo>();
-  msg_parser_map["sensor_msgs/CompressedImage"] = new MessageParser<sensor_msgs::CompressedImage>();
-  msg_parser_map["sensor_msgs/Image"]           = new MessageParser<sensor_msgs::Image>();
-  msg_parser_map["sensor_msgs/Imu"]             = new MessageParser<sensor_msgs::Imu>();
-  msg_parser_map["sensor_msgs/MagneticField"]   = new MessageParser<sensor_msgs::MagneticField>();
-  msg_parser_map["sensor_msgs/NavSatFix"]       = new MessageParser<sensor_msgs::NavSatFix>();
-
-  msg_parser_map["nav_msgs/Odometry"]           = new MessageParser<nav_msgs::Odometry>();
-
-
-  ParseBagFile(
-        bag_file,
-        msg_parser_map,
-        &(distances[0]),
-        &(laser_scans[0]),
-        &(kinect_scans[0]),
-        &(kinect_images[0]),
-        &(stargazer_sigtings[0]),
-        &(durations[0]),
-        &(enml_distances[0]));
+  while (ros::ok()) {
+    // TODO: Check the message queue. For each message, call the callback function
+    // to 
+    // 1. observe the message (log to file),   
+    // 2. check for sequence number and timestamp
+    // 3. Update SensorHealth/SensorStatus vector
+    // 4. Once every K seconds, publish an updated SensorHealth/SensorStatus vector 
+    ros::spinOnce();
+  }
 
   return 0;
 }
